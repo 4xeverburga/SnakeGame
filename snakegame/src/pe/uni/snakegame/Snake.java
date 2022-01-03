@@ -1,5 +1,6 @@
 package pe.uni.snakegame;
 
+import java.awt.*;
 import java.util.Random;
 import java.lang.Math;
 
@@ -11,11 +12,19 @@ public class Snake { // snakeEnemy snakePlayer
    final int body_parts = random.nextInt(Math.min((GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,(GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1) ) + 1;
    final int y[] = new int[GamePanel.GAME_UNITS];
    final int x[] = new int[GamePanel.GAME_UNITS];
+   // final int arrInd;
 
-   Snake(GamePanel panel, int x, int y) {
+   public boolean is_alive = false;
+
+   public Snake(){};
+   public void setSnake(Graphics g, int x, int y) {
+
+      is_alive = true;
       this.x[0] = x;
       this.y[0] = y;
+
       while (true){
+
          direcction();
 
          if((this.x[0]== 0 && this.orientation == 'L') ||
@@ -61,9 +70,39 @@ public class Snake { // snakeEnemy snakePlayer
             break;
       }
    };
+
+   public void render(Graphics g){
+      if(is_alive){
+         draw(g);
+         checkCollisions();
+      } else { delSnake(g);}
+   }
+
+   public void draw(Graphics g){
+      for (int i = 0; i < body_parts; i++) {
+         if (i == 0) {
+            g.setColor(Color.red);
+            g.fillRect(x[i], y[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
+         }
+         else {
+            g.setColor(Color.green);
+            g.fillRect(x[i], y[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
+         }
+      }
+   }
+
+   public void checkCollisions(){
+
+   }
+
+   public void delSnake(Graphics g){
+      //undraw
+      is_alive = false;
+   }
    
    public void move() {
-    for (int i = body_parts; i>0; i--) {
+
+      for (int i = body_parts; i>0; i--) {
          x[i] = x[i-1];
          y[i] = y[i-1];
       }

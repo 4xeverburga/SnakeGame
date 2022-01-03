@@ -141,13 +141,14 @@ esto para qué es? no sirve parece
       snake_x = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
       snake_y = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
 
-      new Snake(this, snake_x, snake_y); //esto es la generacion de una nueva EnemySnake
+      // new Snake(this, snake_x, snake_y); //esto es la generacion de una nueva EnemySnake
    }
 
    @Override
    public void actionPerformed(ActionEvent event){ //Timer
       if (running){
          gameClock += DELAY;
+         System.out.println(gameClock);
          move();
          checkCollisions();
       }
