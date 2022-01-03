@@ -107,7 +107,7 @@ esto para qué es? no sirve parece
 
 
    @Override
-   public void paintComponent(Graphics graphic){
+   public void paintComponent(Graphics graphic){ //si modifico un parámetro aqui se muere el método??
       super.paintComponent(graphic);
       draw(graphic);
    }
@@ -118,8 +118,10 @@ esto para qué es? no sirve parece
          g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
          g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
       }
+
+      //for(int i = 0; i < )
       g.setColor(Color.red);
-      g.fillOval(snake_x, snake_y, UNIT_SIZE, UNIT_SIZE);
+      g.fillRect(snake_x, snake_y, UNIT_SIZE, UNIT_SIZE);
 
       // la cabecita de la serpiente
       for (int i = 0; i < body_parts; i++) {
@@ -139,7 +141,7 @@ esto para qué es? no sirve parece
       snake_x = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
       snake_y = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
 
-      new Snake(this, snake_x, snake_y); //esto es
+      new Snake(this, snake_x, snake_y); //esto es la generacion de una nueva EnemySnake
    }
 
    @Override
