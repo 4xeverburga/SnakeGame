@@ -2,14 +2,15 @@ package pe.uni.snakegame;
 
 import java.awt.*;
 import java.util.Random;
-import java.lang.Math;
+// import java.lang.Math;
 
 public class Snake { // snakeEnemy snakePlayer
 
    Random random = new Random();
 
-   char orientation = 'R'; // L R U D   
-   final int body_parts = random.nextInt(Math.min((GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,(GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1) ) + 1;
+   char orientation = 'L'; // L R U D   
+   // final int body_parts = random.nextInt(Math.min((GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,(GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1) ) + 1;
+   final int body_parts = 4;
    final int y[] = new int[GamePanel.GAME_UNITS];
    final int x[] = new int[GamePanel.GAME_UNITS];
    // final int arrInd;
@@ -17,62 +18,63 @@ public class Snake { // snakeEnemy snakePlayer
    public boolean is_alive = false;
 
    public Snake(){};
-   public void setSnake(Graphics g, int x, int y) {
+   public void setSnake( int x, int y) {
 
       is_alive = true;
       this.x[0] = x;
       this.y[0] = y;
 
+      
+         
       while (true){
 
          direcction();
 
-         if((this.x[0]== 0 && this.orientation == 'L') ||
-            (this.x[0] == GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE && orientation == 'R') ||
-            (this.y[0] == 0 && this.orientation == 'U') ||
-            (this.y[0] == GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE && this.orientation == 'D')){
-               continue;
+         if(!((this.x[0] == 0 && this.orientation == 'L') ||
+            (this.x[0] == GamePanel.SCREEN_WIDTH / GamePanel.UNIT_SIZE && orientation == 'R') ||
+            (this.y[0] == 0 && this.orientation == 'U') || 
+            (this.y[0] == GamePanel.SCREEN_HEIGHT / GamePanel.UNIT_SIZE && this.orientation == 'D'))){
+               break;
             }
 
-         else{
-            break;
-         }
       }
       
-      switch(orientation){
+      // switch(orientation){
 
-         case 'L':
-            for(int i =0; i<body_parts; i++){
-               this.y[i+1] = this.y[i];
-               this.x[i+1] = this.x[i] + 1;
-            }
-            break;
+      //    case 'L':
+      //       for(int i =0; i<body_parts; i++){
+      //          this.y[i+1] = this.y[i];
+      //          this.x[i+1] = this.x[i] + 1;
+      //       }
+      //       break;
          
-         case 'U':
-            for(int i =0; i<body_parts; i++){
-               this.y[i+1] = this.y[i]+1;
-               this.x[i+1] = this.x[i];
-            }
-            break;
+      //    case 'U':
+      //       for(int i =0; i<body_parts; i++){
+      //          this.y[i+1] = this.y[i]+1;
+      //          this.x[i+1] = this.x[i];
+      //       }
+      //       break;
          
-         case 'R':
-            for(int i =0; i<body_parts; i++){
-               this.y[i+1] = this.y[i];
-               this.x[i+1] = this.x[i]-1;
-            }
-            break;
+      //    case 'R':
+      //       for(int i =0; i<body_parts; i++){
+      //          this.y[i+1] = this.y[i];
+      //          this.x[i+1] = this.x[i]-1;
+      //       }
+      //       break;
 
-         case 'D':
-            for(int i =0; i<body_parts; i++){
-               this.y[i+1] = this.y[i]-1;
-               this.x[i+1] = this.x[i];
-            }
-            break;
-      }
+      //    case 'D':
+      //       for(int i =0; i<body_parts; i++){
+      //          this.y[i+1] = this.y[i]-1;
+      //          this.x[i+1] = this.x[i];
+      //       }
+      //       break;
+      // }
+      
    };
 
    public void render(Graphics g){
       if(is_alive){
+         move();
          draw(g);
          checkCollisions();
       } else { delSnake(g);}
@@ -81,11 +83,12 @@ public class Snake { // snakeEnemy snakePlayer
    public void draw(Graphics g){
       for (int i = 0; i < body_parts; i++) {
          if (i == 0) {
-            g.setColor(Color.red);
+            // (122,14,16)
+            g.setColor(Color.white);
             g.fillRect(x[i], y[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
          }
          else {
-            g.setColor(Color.green);
+            g.setColor( new Color(122,14,16));
             g.fillRect(x[i], y[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
          }
       }

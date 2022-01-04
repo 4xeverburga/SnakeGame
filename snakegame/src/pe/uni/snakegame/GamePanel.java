@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
 // import javax.swing.text.StyleConstants.ColorConstants;
 
+import pe.uni.snakegame.registry.snakeRegistry;
+
 import java.util.Random;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,10 +21,11 @@ public class GamePanel extends JPanel implements ActionListener {
    static final int UNIT_SIZE = 25; //25x25
    static final int DELAY = 75;
    static final int GAME_UNITS = (SCREEN_HEIGHT * SCREEN_WIDTH) / UNIT_SIZE*UNIT_SIZE;
-   static int GENERATION_TIME = 10000; //ms
+   static int GENERATION_TIME = 10*DELAY; //ms
    
    final int x[] = new int[GAME_UNITS];
    final int y[] = new int[GAME_UNITS];
+   snakeRegistry registroSnakes = new snakeRegistry();
    int body_parts = 6;
    int snake_x;
    int snake_y;
@@ -35,7 +38,7 @@ public class GamePanel extends JPanel implements ActionListener {
    static boolean go_down = false;
 
    int applesEaten;
-   int gameClock;
+   long gameClock;
    Timer timer;
    Random random = new Random();
    
@@ -69,7 +72,6 @@ public class GamePanel extends JPanel implements ActionListener {
       }
    }
 
-// estoy copiando el codigo del video :v
    public void checkCollisions() {
       for (int i = body_parts; i > 0; i--) {
          if ((x[0] == x[i]) && (y[0] == y[i])) {
@@ -111,6 +113,7 @@ esto para qué es? no sirve parece
    public void paintComponent(Graphics graphic){ //si modifico un parámetro aqui se muere el método??
       super.paintComponent(graphic);
       draw(graphic);
+      registroSnakes.renderSnakes(graphic);
    }
 
 
@@ -142,6 +145,7 @@ esto para qué es? no sirve parece
       snake_x = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
       snake_y = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
 
+      registroSnakes.add(snake_x,snake_y);
       // new Snake(this, snake_x, snake_y); //esto es la generacion de una nueva EnemySnake
    }
 
@@ -149,9 +153,12 @@ esto para qué es? no sirve parece
    public void actionPerformed(ActionEvent event){ //Timer
       if (running){
          gameClock += DELAY;
-         System.out.println(gameClock);
+         // System.out.println(gameClock);
          move();
          checkCollisions();
+         if(gameClock % GENERATION_TIME == 0){
+            newSnakeEnemy();
+         }
       }
       repaint();
    }

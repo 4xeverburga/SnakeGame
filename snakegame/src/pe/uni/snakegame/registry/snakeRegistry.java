@@ -8,16 +8,16 @@ public class snakeRegistry {
    static final int maxSnakes = 10;
    public ArrayList<Snake> entRegistry = new ArrayList<>();
    
-   snakeRegistry(){
+   public snakeRegistry(){
       for(int i=0;i<maxSnakes;i++){
          entRegistry.add(new Snake());
       }   
    }
 
-   public void add(Graphics g, int x, int y) {
+   public void add( int x, int y) {
       for(int i=0;i<entRegistry.size();i++){
          if(!entRegistry.get(i).is_alive){
-            entRegistry.get(i).setSnake(g,x,y);
+            entRegistry.get(i).setSnake(x,y);
          }
       }
    }
