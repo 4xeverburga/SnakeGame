@@ -18,13 +18,14 @@ public class snakeRegistry {
       for(int i=0;i<entRegistry.size();i++){
          if(!entRegistry.get(i).is_alive){
             entRegistry.get(i).setSnake(x,y);
+            break;
          }
       }
    }
 
    public void renderSnakes(Graphics g){
       for(Snake s : this.entRegistry){
-         if(s.is_alive){s.render(g); }
+         if(s.is_alive){s.render(g);}
       }
    }
    

@@ -70,6 +70,8 @@ public class GamePanel extends JPanel implements ActionListener {
       } else if (go_right) {
          x[0] += UNIT_SIZE;
       }
+
+
    }
 
    public void checkCollisions() {
@@ -102,7 +104,7 @@ esto para qué es? no sirve parece
 
    public void startGame(){
 
-      newSnakeEnemy();
+      //newSnakeEnemy();
       running  = true; 
       timer = new Timer(DELAY, this);
       timer.start(); // esto hace que el juego funci0ne, recomendacion: no leer la documentacion.
@@ -157,6 +159,7 @@ esto para qué es? no sirve parece
          move();
          checkCollisions();
          if(gameClock % GENERATION_TIME == 0){
+            System.out.println(gameClock);
             newSnakeEnemy();
          }
       }
@@ -171,6 +174,7 @@ esto para qué es? no sirve parece
          switch(event.getKeyCode()){
 
             case KeyEvent.VK_LEFT: //izquierda
+               if (go_right) break;
                go_left = true;
                go_right = false;
                go_up = false;
@@ -178,26 +182,28 @@ esto para qué es? no sirve parece
                break;
 
             case KeyEvent.VK_UP: //ariba
+               if (go_down) break;
                go_left = false;
                go_right = false;
                go_up = true;
                go_down = false;
-               break; 
+               break;
                
             case KeyEvent.VK_RIGHT://derecha
+               if (go_left) break; 
                go_left = false;
                go_right = true;
                go_up = false;
                go_down = false;
-               break; 
+               break;
 
             case KeyEvent.VK_DOWN: //abajo
+               if (go_up) break;
                go_left = false;
                go_right = false;
                go_up = false;
                go_down = true;
                break;
-
          }
       }
    }
