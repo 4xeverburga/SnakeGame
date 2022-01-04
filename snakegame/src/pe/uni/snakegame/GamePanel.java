@@ -81,6 +81,7 @@ public class GamePanel extends JPanel implements ActionListener {
          if (y[0] > SCREEN_HEIGHT || y[0] < 0) {
             running = false;
          }
+
          if (!running) {
             timer.stop();
          }
@@ -120,8 +121,8 @@ esto para qué es? no sirve parece
       }
 
       //for(int i = 0; i < )
-      g.setColor(Color.red);
-      g.fillRect(snake_x, snake_y, UNIT_SIZE, UNIT_SIZE);
+      // g.setColor(Color.red);
+      // g.fillRect(snake_x, snake_y, UNIT_SIZE, UNIT_SIZE);
 
       // la cabecita de la serpiente
       for (int i = 0; i < body_parts; i++) {

@@ -92,7 +92,17 @@ public class Snake { // snakeEnemy snakePlayer
    }
 
    public void checkCollisions(){
-
+      for (int i = body_parts; i > 0; i--) {
+         if ((x[0] == x[i]) && (y[0] == y[i])) {
+            is_alive = false;
+         }
+         if (x[0] > GamePanel.SCREEN_WIDTH || x[0] < 0) {
+            is_alive = false;
+         }
+         if (y[0] > GamePanel.SCREEN_HEIGHT || y[0] < 0) {
+            is_alive = false;
+         }
+      }
    }
 
    public void delSnake(Graphics g){
