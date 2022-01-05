@@ -1,52 +1,44 @@
 package pe.uni.snakegame;
-
-// import javax.swing.*;
-import javax.swing.*;
-import javax.swing.plaf.DimensionUIResource;
-// import javax.swing.text.StyleConstants.ColorConstants;
-
 import pe.uni.snakegame.registry.snakeRegistry;
 
-import java.util.Random;
+import javax.swing.*;
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
-
+import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
 
    static final int SCREEN_WIDTH = 600;
    static final int SCREEN_HEIGHT = 600;
-   static final int UNIT_SIZE = 25; //25x25
+   static final int UNIT_SIZE = 25; // 25x25
+   static final int GAME_UNITS = (SCREEN_HEIGHT * SCREEN_WIDTH) / UNIT_SIZE * UNIT_SIZE;
    static final int DELAY = 75;
-   static final int GAME_UNITS = (SCREEN_HEIGHT * SCREEN_WIDTH) / UNIT_SIZE*UNIT_SIZE;
-   static int GENERATION_TIME = 10*DELAY; //ms
-   
-   final int x[] = new int[GAME_UNITS];
-   final int y[] = new int[GAME_UNITS];
-   snakeRegistry registroSnakes = new snakeRegistry();
-   int body_parts = 6;
-   int snake_x;
-   int snake_y;
+   static int GENERATION_TIME = 10 * DELAY; // ms
    boolean running = false;
 
-   //dirección
+   final int x[] = new int[GAME_UNITS];
+   final int y[] = new int[GAME_UNITS];
+   
    static boolean go_left = false;
    static boolean go_right = true;
    static boolean go_up = false;
    static boolean go_down = false;
 
-   int applesEaten;
+   snakeRegistry registroSnakes = new snakeRegistry();
+   int body_parts = 6;
+   int snake_x;
+   int snake_y;
    long gameClock;
+
    Timer timer;
    Random random = new Random();
-   
-   
-   GamePanel(){
-      
+
+   GamePanel() {
       this.setPreferredSize(new DimensionUIResource(SCREEN_WIDTH, SCREEN_HEIGHT));
-      //122, 14, 16  
+      // 122, 14, 16
       this.setBackground(Color.black);
       this.setFocusable(true);
       this.addKeyListener(new MyKeyAdapter());
@@ -54,9 +46,8 @@ public class GamePanel extends JPanel implements ActionListener {
 
    }
 
-   public void move(){
-
-      for (int i = body_parts; i>0; i--) {
+   public void move() {
+      for (int i = body_parts; i > 0; i--) {
          x[i] = x[i-1];
          y[i] = y[i-1];
       }
@@ -70,7 +61,6 @@ public class GamePanel extends JPanel implements ActionListener {
       } else if (go_right) {
          x[0] += UNIT_SIZE;
       }
-
 
    }
 
@@ -91,75 +81,50 @@ public class GamePanel extends JPanel implements ActionListener {
          }
       }
    }
-// fin del copiado
 
-/*
-
-esto para qué es? no sirve parece
-
-   public void gameComponent(Graphics graphics){
-
-   }
-*/
-
-   public void startGame(){
-
-      //newSnakeEnemy();
-      running  = true; 
+   public void startGame() {
+      running = true;
       timer = new Timer(DELAY, this);
-      timer.start(); // esto hace que el juego funci0ne, recomendacion: no leer la documentacion.
+      timer.start(); // esto hace que el juego funcione, recomendacion: no leer la documentacion.
    }
-
 
    @Override
-   public void paintComponent(Graphics graphic){ //si modifico un parámetro aqui se muere el método??
+   public void paintComponent(Graphics graphic) {
       super.paintComponent(graphic);
       draw(graphic);
       registroSnakes.renderSnakes(graphic);
    }
 
-
-   public void draw(Graphics g){ 
-      for(int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++){
+   public void draw(Graphics g) {
+      for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
          g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
          g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
       }
 
-      //for(int i = 0; i < )
-      // g.setColor(Color.red);
-      // g.fillRect(snake_x, snake_y, UNIT_SIZE, UNIT_SIZE);
-
-      // la cabecita de la serpiente
       for (int i = 0; i < body_parts; i++) {
          if (i == 0) {
             g.setColor(Color.red);
             g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-         }
-         else {
+         } else {
             g.setColor(Color.green);
             g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
          }
       }
    }
 
-   public void newSnakeEnemy(){
-
-      snake_x = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
-      snake_y = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
-
-      registroSnakes.add(snake_x,snake_y);
-      // new Snake(this, snake_x, snake_y); //esto es la generacion de una nueva EnemySnake
+   public void newSnakeEnemy() {
+      snake_x = random.nextInt((int) (SCREEN_WIDTH / UNIT_SIZE)) * UNIT_SIZE;
+      snake_y = random.nextInt((int) (SCREEN_HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
+      registroSnakes.add(snake_x, snake_y); // esto es la generacion de una nueva EnemySnake
    }
 
    @Override
-   public void actionPerformed(ActionEvent event){ //Timer
-      if (running){
+   public void actionPerformed(ActionEvent event) { // Timer
+      if (running) {
          gameClock += DELAY;
-         // System.out.println(gameClock);
          move();
          checkCollisions();
-         if(gameClock % GENERATION_TIME == 0){
-            System.out.println(gameClock);
+         if (gameClock % GENERATION_TIME == 0) {
             newSnakeEnemy();
          }
       }
@@ -169,11 +134,10 @@ esto para qué es? no sirve parece
    public class MyKeyAdapter extends KeyAdapter {
 
       @Override
-      public void keyPressed(KeyEvent event){
-                   
-         switch(event.getKeyCode()){
+      public void keyPressed(KeyEvent event) {
+         switch (event.getKeyCode()) {
 
-            case KeyEvent.VK_LEFT: //izquierda
+            case KeyEvent.VK_LEFT:
                if (go_right) break;
                go_left = true;
                go_right = false;
@@ -181,24 +145,24 @@ esto para qué es? no sirve parece
                go_down = false;
                break;
 
-            case KeyEvent.VK_UP: //ariba
+            case KeyEvent.VK_UP:
                if (go_down) break;
                go_left = false;
                go_right = false;
                go_up = true;
                go_down = false;
                break;
-               
-            case KeyEvent.VK_RIGHT://derecha
-               if (go_left) break; 
+
+            case KeyEvent.VK_RIGHT:
+               if (go_left) break;
                go_left = false;
                go_right = true;
                go_up = false;
                go_down = false;
                break;
 
-            case KeyEvent.VK_DOWN: //abajo
-               if (go_up) break;
+            case KeyEvent.VK_DOWN:
+            if (go_up) break;
                go_left = false;
                go_right = false;
                go_up = false;
@@ -207,5 +171,5 @@ esto para qué es? no sirve parece
          }
       }
    }
-   
+
 }

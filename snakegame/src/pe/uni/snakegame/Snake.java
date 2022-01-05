@@ -4,91 +4,89 @@ import java.awt.*;
 import java.util.Random;
 import java.lang.Math;
 
-public class Snake { // snakeEnemy snakePlayer
+public class Snake {
 
    Random random = new Random();
-
-   char orientation = 'L'; // L R U D   
-   // final int body_parts = random.nextInt(Math.min((GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,(GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1) ) + 1;
+   char orientation = 'L';  
    public int body_parts = 4;
-   final int MAX_SNAKE = Math.min((GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,(GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1);
+   final int MAX_SNAKE = Math.min(
+         (GamePanel.SCREEN_HEIGHT/GamePanel.UNIT_SIZE)-1,
+         (GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE)-1 );
    final int y[] = new int[MAX_SNAKE];
    final int x[] = new int[MAX_SNAKE];
-   // final int arrInd;
-
    public boolean is_alive = false;
 
    public Snake(){
-      for(int i = 0; i<MAX_SNAKE; i++){
+      for(int i=0; i<MAX_SNAKE; i++){
           this.x[i] = -1*GamePanel.UNIT_SIZE;
           this.y[i] = -1*GamePanel.UNIT_SIZE;
       }
    };
-   public void setSnake( int x, int y) {
-      
+
+   public void setSnake(int x, int y) {
       this.is_alive = true;
       this.x[0] = x;
       this.y[0] = y;
-
-      
          
-      while (true){
+      while (true) {
          direcction();
-         
          if(!(
             (this.x[0] == 0 && this.orientation == 'L') ||
-            (this.x[0] == GamePanel.SCREEN_WIDTH / GamePanel.UNIT_SIZE && orientation == 'R') ||
             (this.y[0] == 0 && this.orientation == 'U') || 
-            (this.y[0] == GamePanel.SCREEN_HEIGHT / GamePanel.UNIT_SIZE && this.orientation == 'D'))){
-               
+            (this.x[0] == GamePanel.SCREEN_WIDTH/GamePanel.UNIT_SIZE && orientation == 'R') || // revisar esta linea con la siguiente
+            (this.y[0] == GamePanel.SCREEN_HEIGHT / GamePanel.UNIT_SIZE && this.orientation == 'D'))){ 
                break;
-            }
-
+         }
       }
-      
-      // switch(orientation){
 
-      //    case 'L':
-      //       for(int i =0; i<body_parts; i++){
-      //          this.y[i+1] = this.y[i];
-      //          this.x[i+1] = this.x[i] + 1;
-      //       }
-      //       break;
-         
-      //    case 'U':
-      //       for(int i =0; i<body_parts; i++){
-      //          this.y[i+1] = this.y[i]+1;
-      //          this.x[i+1] = this.x[i];
-      //       }
-      //       break;
-         
-      //    case 'R':
-      //       for(int i =0; i<body_parts; i++){
-      //          this.y[i+1] = this.y[i];
-      //          this.x[i+1] = this.x[i]-1;
-      //       }
-      //       break;
+      /*
+      switch(orientation){
 
-      //    case 'D':
-      //       for(int i =0; i<body_parts; i++){
-      //          this.y[i+1] = this.y[i]-1;
-      //          this.x[i+1] = this.x[i];
-      //       }
-      //       break;
-      // }
+         case 'L':
+            for(int i =0; i<body_parts; i++){
+               this.y[i+1] = this.y[i];
+               this.x[i+1] = this.x[i] + 1;
+            }
+            break;
+         
+         case 'U':
+            for(int i =0; i<body_parts; i++){
+               this.y[i+1] = this.y[i]+1;
+               this.x[i+1] = this.x[i];
+            }
+            break;
+         
+         case 'R':
+            for(int i =0; i<body_parts; i++){
+               this.y[i+1] = this.y[i];
+               this.x[i+1] = this.x[i]-1;
+            }
+            break;
+
+         case 'D':
+            for(int i =0; i<body_parts; i++){
+               this.y[i+1] = this.y[i]-1;
+               this.x[i+1] = this.x[i];
+            }
+            break;
+      }
+      */
       
    };
 
    public void render(Graphics g){
       checkCollisions();
-      if(is_alive){
+      if (is_alive) {
          move();
          draw(g);
-      } else { delSnake(g);}
+      } 
+      else { 
+         delSnake(g);
+      }
    }
 
    public void draw(Graphics g){
-      for (int i = 0; i < body_parts+1; i++) {
+      for (int i=0; i<body_parts+1; i++) {
          if (i == 0) {
             // (122,14,16)
             g.setColor(Color.white);
@@ -102,7 +100,7 @@ public class Snake { // snakeEnemy snakePlayer
    }
 
    public void checkCollisions(){
-      for (int i = body_parts; i > 0; i--) {
+      for (int i=body_parts; i>0; i--) {
          if (x[0] > GamePanel.SCREEN_WIDTH || x[0] < 0) {
             is_alive = false;
          }
@@ -122,7 +120,6 @@ public class Snake { // snakeEnemy snakePlayer
    }
    
    public void move() {
-
       for (int i = body_parts; i>0; i--) {
          x[i] = x[i-1];
          y[i] = y[i-1];
