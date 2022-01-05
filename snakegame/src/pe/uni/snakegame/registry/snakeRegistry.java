@@ -23,6 +23,14 @@ public class snakeRegistry {
       }
    }
 
+   public void addToPanelArr(){
+      for(Snake s : this.entRegistry){
+         if (s.is_alive) {
+            s.addToPanelArr();
+         }
+      }
+   }
+
    public void renderSnakes(Graphics g){
       for(Snake s : this.entRegistry){
          if (s.is_alive) {

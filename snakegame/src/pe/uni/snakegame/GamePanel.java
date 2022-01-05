@@ -16,11 +16,15 @@ public class GamePanel extends JPanel implements ActionListener {
    static final int UNIT_SIZE = 25; // 25x25
    static final int GAME_UNITS = (SCREEN_HEIGHT * SCREEN_WIDTH) / UNIT_SIZE * UNIT_SIZE;
    static final int DELAY = 75;
-   static int GENERATION_TIME = 10 * DELAY; // ms
+   static final int REREDUCTION_SLOPE = 1;
+   static final int REDUCTION_TIME_UNITS = 30;
+   static int generation_time = 100 * DELAY; // ms //debe ser mayor o igual a DELAY
    boolean running = false;
 
+   static final boolean PanelArray[][] = new boolean[SCREEN_WIDTH/UNIT_SIZE][SCREEN_HEIGHT/UNIT_SIZE];
    final int x[] = new int[GAME_UNITS];
    final int y[] = new int[GAME_UNITS];
+   
    
    static boolean go_left = false;
    static boolean go_right = true;
@@ -62,6 +66,8 @@ public class GamePanel extends JPanel implements ActionListener {
          x[0] += UNIT_SIZE;
       }
 
+      //a new check collisions
+
    }
 
    public void checkCollisions() {
@@ -74,8 +80,9 @@ public class GamePanel extends JPanel implements ActionListener {
          }
          if (y[0] > SCREEN_HEIGHT || y[0] < 0) {
             running = false;
-         }
-
+         }        
+         
+         //LAST CHECK
          if (!running) {
             timer.stop();
          }
@@ -93,15 +100,27 @@ public class GamePanel extends JPanel implements ActionListener {
       super.paintComponent(graphic);
       draw(graphic);
       registroSnakes.renderSnakes(graphic);
+
+   }
+
+   public void checkDrawCollitions(Graphics g){
+ 
    }
 
    public void draw(Graphics g) {
+
       for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
          g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
          g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
       }
 
       for (int i = 0; i < body_parts; i++) {
+
+         
+         // int coordx= this.x[i];
+         // int coordy= this.y[i];  
+         // GamePanel.PanelArray[coordx][coordy]=true;
+
          if (i == 0) {
             g.setColor(Color.red);
             g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
@@ -110,6 +129,7 @@ public class GamePanel extends JPanel implements ActionListener {
             g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
          }
       }
+
    }
 
    public void newSnakeEnemy() {
@@ -124,11 +144,19 @@ public class GamePanel extends JPanel implements ActionListener {
          gameClock += DELAY;
          move();
          checkCollisions();
-         if (gameClock % GENERATION_TIME == 0) {
+         
+         if(gameClock %  REDUCTION_TIME_UNITS * DELAY == 0 && generation_time!=DELAY * 3)
+            refreshGenTime();
+      
+         if (gameClock % generation_time == 0) {
             newSnakeEnemy();
          }
       }
       repaint();
+   }
+
+   public void refreshGenTime() {
+      generation_time -= REREDUCTION_SLOPE * DELAY;
    }
 
    public class MyKeyAdapter extends KeyAdapter {
