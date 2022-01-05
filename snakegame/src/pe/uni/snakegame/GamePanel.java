@@ -71,21 +71,37 @@ public class GamePanel extends JPanel implements ActionListener {
    }
 
    public void checkCollisions() {
+
+
+      if (x[0] >= SCREEN_WIDTH || x[0] < 0) {
+         running = false;
+      }
+      if (y[0] >= SCREEN_HEIGHT || y[0] < 0) {
+         running = false;
+      }
+
+      // printPanel();
+      for (int i = 0; i <body_parts && running; i++) {
+         if (PanelArray[x[i]/UNIT_SIZE][y[i]/UNIT_SIZE]) {
+            System.out.println("Se ha colisionado con una snake");
+            running = false;
+            break;
+         }  
+      }
+      
       for (int i = body_parts; i > 0; i--) {
+
          if ((x[0] == x[i]) && (y[0] == y[i])) {
             running = false;
          }
-         if (x[0] > SCREEN_WIDTH || x[0] < 0) {
-            running = false;
-         }
-         if (y[0] > SCREEN_HEIGHT || y[0] < 0) {
-            running = false;
-         }        
-         
+
          //LAST CHECK
          if (!running) {
             timer.stop();
+            //gmaeOver();
+            break;
          }
+
       }
    }
 
@@ -99,42 +115,81 @@ public class GamePanel extends JPanel implements ActionListener {
    public void paintComponent(Graphics graphic) {
       super.paintComponent(graphic);
       draw(graphic);
-      registroSnakes.renderSnakes(graphic);
-
    }
 
-   public void checkDrawCollitions(Graphics g){
- 
+   public void printPanel(){
+      // for(int l=0;l<body_parts;l++){
+      //    PanelArray[x[l]/(UNIT_SIZE)][y[l]/(UNIT_SIZE)] = true;
+      // }
+      for(int i=0;i<body_parts && running;i++){
+         System.out.print(x[i]/UNIT_SIZE+" ");
+         System.out.print(y[i]/UNIT_SIZE+" |");
+         if(PanelArray[x[i]/UNIT_SIZE][y[i]/UNIT_SIZE]) System.out.print(" COL");
+      }
+
+      // System.out.println();
+      // for(int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++){
+      //    System.out.println();
+      //    for(int j=0;j<SCREEN_WIDTH/UNIT_SIZE;j++){
+      //    boolean founded = false;
+      //    for(int l=0;l<body_parts;l++){
+      //       if(x[l]/(UNIT_SIZE)==j && y[l]/(UNIT_SIZE)==i) {System.out.print(1+""); founded = true;}
+      //    }
+      //    if(!founded) System.out.print(0+"");
+      //    }
+      // }
+
+      System.out.println();
+
+      for(int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++){
+         System.out.println();
+         for(int j=0;j<SCREEN_WIDTH/UNIT_SIZE;j++){
+
+         if(i==20 && j==10) {System.out.print("S"); continue;}
+         if(PanelArray[i][j]) System.out.print("1");
+         else System.out.print("0");
+
+         }
+      }
+      System.out.println();
    }
 
    public void draw(Graphics g) {
-
-      for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
-         g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
-         g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
-      }
-
-      for (int i = 0; i < body_parts; i++) {
-
-         
-         // int coordx= this.x[i];
-         // int coordy= this.y[i];  
-         // GamePanel.PanelArray[coordx][coordy]=true;
-
-         if (i == 0) {
-            g.setColor(Color.red);
-            g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-         } else {
-            g.setColor(Color.green);
-            g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+      if(running){
+         for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
+            g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+            g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
          }
-      }
 
+         for (int i = 0; i < body_parts; i++) {
+            if (i == 0) {
+               g.setColor(Color.red);
+               g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            } else {
+               g.setColor(Color.green);
+               g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+         }
+         
+         registroSnakes.renderSnakes(g);
+      }
+      else{ gameOver(g);}
    }
 
+   public void gameOver(Graphics g) {
+      g.setColor(Color.red);
+      g.setFont( new Font("Ink Free",Font.BOLD,55));
+      FontMetrics metrics = getFontMetrics(g.getFont());
+
+      String display = "ACOSTAAAAAAAAAA";
+      g.drawString(display ,(SCREEN_WIDTH - metrics.stringWidth(display))/2, SCREEN_HEIGHT/2);
+   }
+   
    public void newSnakeEnemy() {
-      snake_x = random.nextInt((int) (SCREEN_WIDTH / UNIT_SIZE)) * UNIT_SIZE;
-      snake_y = random.nextInt((int) (SCREEN_HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
+      // snake_x = random.nextInt((int) (SCREEN_WIDTH / UNIT_SIZE)) * UNIT_SIZE;
+      // snake_y = random.nextInt((int) (SCREEN_HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
+      snake_x = 20 * UNIT_SIZE;
+      snake_y = 10* UNIT_SIZE;
       registroSnakes.add(snake_x, snake_y); // esto es la generacion de una nueva EnemySnake
    }
 
@@ -153,6 +208,8 @@ public class GamePanel extends JPanel implements ActionListener {
          }
       }
       repaint();
+      // printPanel();
+      // checkCollisions();
    }
 
    public void refreshGenTime() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 
 public class snakeRegistry {
-   static final int maxSnakes = 10;
+   static final int maxSnakes = 3;
    public ArrayList<Snake> entRegistry = new ArrayList<>();
    
    public snakeRegistry(){
@@ -23,13 +23,13 @@ public class snakeRegistry {
       }
    }
 
-   public void addToPanelArr(){
-      for(Snake s : this.entRegistry){
-         if (s.is_alive) {
-            s.addToPanelArr();
-         }
-      }
-   }
+   // public void addToPanelArr(){
+   //    for(Snake s : this.entRegistry){
+   //       if (s.is_alive) {
+   //          s.addToPanelArr();
+   //       }
+   //    }
+   // }
 
    public void renderSnakes(Graphics g){
       for(Snake s : this.entRegistry){
